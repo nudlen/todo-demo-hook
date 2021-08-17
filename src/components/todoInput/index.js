@@ -3,7 +3,7 @@ import "./styles.css";
 
 export default function TodoInput(props) {
   const inputContent = useRef(null);
-  const { addItem } = props;
+  const { addItem, handleSelectAll, isChecked } = props;
   const handleSubmit = () => {
     const inputValue = inputContent.current.value.trim();
 
@@ -17,7 +17,12 @@ export default function TodoInput(props) {
 
   return (
     <div className="todo-input">
-      <input type="checkbox" className="select-all" />
+      <input
+        type="checkbox"
+        className="select-all"
+        checked={isChecked}
+        onChange={handleSelectAll}
+      />
       <input
         type="text"
         className="input-place"
