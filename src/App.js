@@ -37,10 +37,41 @@ export default function App() {
       return item;
     });
     setTodoList([...todolist]);
+    console.log(todolist);
+  };
+
+  const handleSelectAll = () => {
+    if (
+      todolist.every((item, index) => {
+        return item.completed === false;
+      })
+    ) {
+      todolist.map((item) => {
+        item.completed = !item.completed;
+        return item;
+      });
+      setTodoList([...todolist]);
+    } else if (
+      todolist.every((item, index) => {
+        return item.completed === true;
+      })
+    ) {
+      todolist.map((item) => {
+        item.completed = !item.completed;
+        return item;
+      });
+      setTodoList([...todolist]);
+    } else {
+      todolist.map((item) => {
+        item.completed = true;
+        return item;
+      });
+      setTodoList([...todolist]);
+    }
   };
   return (
     <div className="App">
-      <TodoInput addItem={addItem} />
+      <TodoInput addItem={addItem} handleSelectAll={handleSelectAll} />
       <ul className="todo-list">
         {todolist.map((item, index) => {
           return (
