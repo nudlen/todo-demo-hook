@@ -5,14 +5,14 @@ import TodoItem from "./components/todoItem/index.js";
 export default function App() {
   const [todolist, setTodoList] = useState([]);
 
-  // useEffect(() => {
-  //   const todoData = JSON.parse(localStorage.getItem("todoData") || []);
-  //   setTodoList(todoData);
-  // }, []);
+  useEffect(() => {
+    const todoData = JSON.parse(localStorage.getItem("todoData") || []);
+    setTodoList(todoData);
+  }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem("todoData", JSON.stringify(todolist));
-  // }, [todolist]);
+  useEffect(() => {
+    localStorage.setItem("todoData", JSON.stringify(todolist));
+  }, [todolist]);
 
   const addItem = (value) => {
     const item = { id: Date.now(), content: value, completed: false };
