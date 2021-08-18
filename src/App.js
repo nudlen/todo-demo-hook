@@ -10,6 +10,15 @@ export default function App() {
   useEffect(() => {
     const todoData = JSON.parse(localStorage.getItem("todoData") || []);
     setTodoList(todoData);
+    //关联全选checkbox
+    if (
+      todoData.every((item, index) => {
+        return item.completed === true;
+      }) &&
+      todoData.length !== 0
+    ) {
+      setChecked(true);
+    }
   }, []);
 
   //设置缓存
@@ -18,58 +27,66 @@ export default function App() {
   }, [todolist]);
 
   //添加元素
-  const addItem = (value) => {
-    const item = { id: Date.now(), content: value, completed: false };
-    setTodoList([item, ...todolist]);
-  }; //TODO 加useCallback
+  const addItem = useCallback(
+    (value) => {
+      const item = { id: Date.now(), content: value, completed: false };
+      setTodoList([item, ...todolist]);
+    },
+    [todolist]
+  ); //TODO 加useCallback
 
   //勾选元素
-  const handleCheckBox = (id) => {
-    todolist.map((item, index) => {
-      if (item.id === id) {
-        item.completed = !item.completed;
+  const handleCheckBox = useCallback(
+    (id) => {
+      todolist.map((item, index) => {
+        if (item.id === id) {
+          item.completed = !item.completed;
+        }
+        return item;
+      });
+      setTodoList([...todolist]);
+      //关联全选checkbox
+      if (
+        todolist.every((item, index) => {
+          return item.completed === true;
+        }) &&
+        todolist.length !== 0
+      ) {
+        setChecked(true);
+      } else {
+        setChecked(false);
       }
-      return item;
-    });
-    setTodoList([...todolist]);
-    //关联全选checkbox
-    if (
-      todolist.every((item, index) => {
-        return item.completed === true;
-      }) &&
-      todolist.length !== 0
-    ) {
-      setChecked(true);
-    } else {
-      setChecked(false);
-    }
-  }; //TODO 加useCallback
+    },
+    [todolist]
+  ); //TODO 加useCallback
 
   //删除元素
-  const handleDelete = (id) => {
-    todolist.map((item, index, arr) => {
-      if (item.id === id) {
-        arr.splice(index, 1);
+  const handleDelete = useCallback(
+    (id) => {
+      todolist.map((item, index, arr) => {
+        if (item.id === id) {
+          arr.splice(index, 1);
+        }
+        return item;
+      });
+      setTodoList([...todolist]);
+      //关联全选checkbox
+      if (
+        todolist.every((item, index) => {
+          return item.completed === true;
+        }) &&
+        todolist.length !== 0
+      ) {
+        setChecked(true);
+      } else {
+        setChecked(false);
       }
-      return item;
-    });
-    setTodoList([...todolist]);
-    //关联全选checkbox
-    if (
-      todolist.every((item, index) => {
-        return item.completed === true;
-      }) &&
-      todolist.length !== 0
-    ) {
-      setChecked(true);
-      console.log("全对");
-    } else {
-      setChecked(false);
-    }
-  };
+    },
+    [todolist]
+  );
 
   //全选元素
-  const handleSelectAll = () => {
+  const handleSelectAll = useCallback(() => {
     if (
       //全部未选
       todolist.every((item, index) => {
@@ -103,7 +120,8 @@ export default function App() {
       setTodoList([...todolist]);
       setChecked(!isChecked);
     }
-  };
+  }, [isChecked, todolist]);
+
   //JSX
   return (
     <div className="App">
