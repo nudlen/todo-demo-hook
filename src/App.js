@@ -10,6 +10,15 @@ export default function App() {
   useEffect(() => {
     const todoData = JSON.parse(localStorage.getItem("todoData") || []);
     setTodoList(todoData);
+    //关联全选checkbox
+    if (
+      todoData.every((item, index) => {
+        return item.completed === true;
+      }) &&
+      todoData.length !== 0
+    ) {
+      setChecked(true);
+    }
   }, []);
 
   //设置缓存
@@ -18,10 +27,13 @@ export default function App() {
   }, [todolist]);
 
   //添加元素
-  const addItem = (value) => {
-    const item = { id: Date.now(), content: value, completed: false };
-    setTodoList([item, ...todolist]);
-  }; //TODO 加useCallback
+  const addItem = useCallback(
+    (value) => {
+      const item = { id: Date.now(), content: value, completed: false };
+      setTodoList([item, ...todolist]);
+    },
+    [todolist]
+  ); //TODO 加useCallback
 
   //勾选元素
   const handleCheckBox = useCallback(
